@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { X } from "lucide-react";
 import { useApp } from "./AppProvider";
 import {
   debtLoadPercent,
@@ -9,10 +7,10 @@ import {
   monthlyPayments,
   remainingAfterPayments,
   whatIf,
-  numbersForAi,
 } from "@/lib/calc.mjs";
 import { formatSom, typeLetter } from "@/lib/format";
 import { DEBT_TYPES } from "@/lib/store";
+import { X } from "lucide-react";
 
 function zoneText(tr, zone) {
   if (zone === "red") return tr("loadDanger");
@@ -28,38 +26,6 @@ export default function Dashboard() {
   const paid = monthlyPayments(debts);
   const left = remainingAfterPayments(income, debts);
   const sim = whatIf(income, debts, app.extraPayment);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function ask() {
-    setLoading(true);
-    setAnswer("");
-    try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mode: "explain",
-          lang: app.lang,
-          question,
-          numbers: numbersForAi({
-            income,
-            debts,
-            extraPayment: app.extraPayment,
-          }),
-        }),
-      });
-      const data = await res.json();
-      setAnswer(data.result || tr("aiError"));
-    } catch {
-      setAnswer(
-        `${tr("aiError")} DTI ${dti}% / ${50}%. ${zoneText(tr, zone)}`
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <>
@@ -67,7 +33,7 @@ export default function Dashboard() {
       <p className="sub">{tr("helloSub")}</p>
 
       <div className="grid-top">
-        <section className="card load-card">
+        <section className="card load-card" style={{ width: "100%" }}>
           <div className="muted">{tr("loadTitle")}</div>
           <div className="load-row">
             <div>
@@ -104,20 +70,6 @@ export default function Dashboard() {
               <div className="stat-val">{formatSom(left)} {tr("som")}</div>
             </div>
           </div>
-        </section>
-
-        <section className="card ai-card">
-          <h3>{tr("assistant")}</h3>
-          <p>{tr("assistantSub")}</p>
-          <input
-            placeholder={tr("askPlaceholder")}
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-          />
-          <button className="btn-primary wide" onClick={ask} disabled={loading}>
-            {loading ? tr("asking") : tr("ask")}
-          </button>
-          {answer ? <div className="ai-out">{answer}</div> : null}
         </section>
       </div>
 
