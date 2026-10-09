@@ -19,7 +19,7 @@ const NAV = [
   { href: "/", key: "home", icon: Home },
   { href: "/debts", key: "myDebts", icon: Wallet },
   { href: "/plan", key: "plan", icon: Route },
-  { href: "/contract", key: "contract", icon: FileSearch },
+  // { href: "/contract", key: "contract", icon: FileSearch }, // <--- Вот эту строчку удаляем
   { href: "/ai-chat", key: "aiChat", icon: Bot },
   { href: "/settings", key: "settings", icon: Settings },
 ];
