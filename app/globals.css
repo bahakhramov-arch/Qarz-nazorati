@@ -14,7 +14,9 @@
   --shadow: 0 10px 30px rgba(37, 78, 170, 0.06);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -25,6 +27,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: Inter, system-ui, sans-serif;
+  overflow-x: hidden; /* Защита от горизонтального скролла на мобилках */
 }
 
 a {
@@ -37,6 +40,7 @@ input,
 select,
 textarea {
   font: inherit;
+  font-size: 16px; /* Защита от автозума на iPhone при клике */
 }
 
 .app-bg {
@@ -527,6 +531,7 @@ input[type="range"] {
   width: min(420px, 100%);
 }
 
+/* === МОБИЛЬНАЯ АДАПТАЦИЯ (ПОД ТЕЛЕФОНЫ) === */
 @media (max-width: 1100px) {
   .app-bg {
     grid-template-columns: 1fr;
@@ -534,10 +539,16 @@ input[type="range"] {
   .sidebar {
     border-right: 0;
     border-bottom: 1px solid var(--line);
+    padding: 14px 12px;
   }
   .nav {
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 4px;
+  }
+  .nav-item {
+    padding: 8px 10px;
+    font-size: 13px;
   }
   .side-foot {
     display: none;
@@ -550,9 +561,50 @@ input[type="range"] {
   }
   .debt-list li {
     grid-template-columns: 36px 1fr 28px;
+    background: #f8fafc;
+    padding: 8px;
+    border-radius: 12px;
   }
   .debt-list .num,
   .tiny-lab {
-    display: none;
+    display: none; /* Пря громоздкие поля ввода на узких экранах, чтобы они не ломали верстку */
+  }
+  .topbar {
+    padding: 12px 16px 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .top-actions {
+    margin-left: 0;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .page {
+    padding: 12px 16px 30px;
+  }
+  .h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .pct {
+    font-size: 38px;
+  }
+  .top-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .lang {
+    justify-content: center;
+  }
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
   }
 }
